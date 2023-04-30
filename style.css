@@ -1,0 +1,30 @@
+body>table {
+    width: 100%;
+}
+
+table {
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+table.list {
+    width: 100%;
+}
+
+td,
+th {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 8px;
+}
+
+tr:nth-child(even),
+table.list thead>tr {
+    background-color: #dddddd;
+}
+a{
+    cursor: pointer;
+    text-decoration: none;
+    color: #0000ee;
+    margin-right: 4px;
+}
