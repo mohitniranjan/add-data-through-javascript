@@ -85,14 +85,18 @@ const hideStudentModal = () => {
 };
 
 const populateCourseFee = (courseIndex) => {
-    studentCourseFeeField.innerHTML = courses[courseIndex].fee;
+    if (courseIndex !== null) {
+        studentCourseFeeField.value = courses[courseIndex].fee;
+    } else {
+        studentCourseFeeField.value = "";
+    }
 };
 
 const populateStudentForm = () => {
     let options = `<option id="default-option">Please select a course from here</option>
     `;
     courses.map((course, i) => {
-       let option = `<option id="option-${i}" onselect="populateCourseFee(${i});">${course.name}</option>
+       let option = `<option id="option-${i}" value="${i}">${course.name}</option>
        `; 
        options = options.concat(option);
     });
