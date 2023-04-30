@@ -4,14 +4,17 @@ let courseIdField = null;
 let courseNameField = null;
 let courseFeeField = null;
 let courseDurationField = null;
+let courseModalContent = ``;
 
-const tableBody = document.getElementById("table-body");
+const courseTableBody = document.getElementById("course-table-body");
 const courseModal = document.getElementById("course-modal");
 const courseModalContainer = document.getElementById("course-modal-container");
 const courseTable = document.getElementById("course-table");
-const studentTable = document.getElementById("student-table");
 
-let modalContent = ``;
+const studentModal = document.getElementById("student-modal");
+const studentCourseNameField = document.getElementById("student-course-name");
+const studentCourseFeeField = document.getElementById("student-course-fee");
+const studentTable = document.getElementById("student-table");
 
 const showCourseTable = () => {
     studentTable.style.display = "none";
@@ -24,7 +27,7 @@ const showStudentTable = () => {
 };
 
 const setCourseModalContentAsSave = () => {
-    modalContent = `<form>
+    courseModalContent = `<form>
         <div class="form-group">
             <label for="course-id">Course ID:</label>
             <input type="text" class="form-control" id="course-id">
@@ -44,12 +47,12 @@ const setCourseModalContentAsSave = () => {
         <button type="button" onclick="addCourse()">Add</button>
         <button type="button" onclick="hideCourseModal()">Cancel</button>
     </form>`
-    courseModalContainer.innerHTML = modalContent;
+    courseModalContainer.innerHTML = courseModalContent;
     refreshFields();
 };
 
 const setCourseModalContentAsEdit = (courseIndex) => {
-    modalContent = `<form>
+    courseModalContent = `<form>
         <div class="form-group">
             <label for="course-id">Course ID:</label>
             <input type="text" class="form-control" id="course-id">
@@ -69,8 +72,36 @@ const setCourseModalContentAsEdit = (courseIndex) => {
         <button type="button" onclick="editCourseContent(${courseIndex})">Save</button>
         <button type="button" onclick="hideCourseModal()">Cancel</button>
     </form>`
-    courseModalContainer.innerHTML = modalContent;
+    courseModalContainer.innerHTML = courseModalContent;
     refreshFields();
+};
+
+const showStudentModal = () => {
+    studentModal.style.display = "block";
+};
+
+const hideStudentModal = () => {
+    studentModal.style.display = "none";
+};
+
+const populateCourseFee = (courseIndex) => {
+    studentCourseFeeField.innerHTML = courses[courseIndex].fee;
+};
+
+const populateStudentForm = () => {
+    let options = `<option id="default-option">Please select a course from here</option>
+    `;
+    courses.map((course, i) => {
+       let option = `<option id="option-${i}" onselect="populateCourseFee(${i});">${course.name}</option>
+       `; 
+       options = options.concat(option);
+    });
+    studentCourseNameField.innerHTML = options;
+};
+
+const commitCourseChanges = () => {
+    flushToFrontEnd();
+    populateStudentForm();
 };
 
 const refreshFields = () => {
@@ -108,7 +139,7 @@ const flushToFrontEnd = () => {
         `;
         tableBodyContent = tableBodyContent.concat(tr);
     });
-    tableBody.innerHTML = tableBodyContent;
+    courseTableBody.innerHTML = tableBodyContent;
 };
 
 const addCourse = () => {
@@ -119,14 +150,13 @@ const addCourse = () => {
         duration: courseDurationField.value,
     };
     courses.push(courseData);
-    flushToFrontEnd();
+    commitCourseChanges();
     hideCourseModal();
 };
 
 const deleteCourse = (courseIndex) => {
     courses.splice(courseIndex, 1);
-    console.log(courses);
-    flushToFrontEnd();
+    commitCourseChanges();
 };
 
 const editCourse = (courseIndex) => {
@@ -145,6 +175,6 @@ const editCourseContent = (courseIndex) => {
         duration: courseDurationField.value,
     };
     courses[courseIndex] = courseData;
-    flushToFrontEnd();
+    commitCourseChanges();
     hideCourseModal();
 }
