@@ -28,3 +28,11 @@ a{
     color: #0000ee;
     margin-right: 4px;
 }
+
+.modal {
+    display: none;
+    position: absolute;
+    margin: 0 auto;
+    height: fit-content;
+    width: fit-content;
+}
